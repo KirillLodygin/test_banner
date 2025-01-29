@@ -1,4 +1,4 @@
-const objectsGroups = [
+const UPPER_CAMEL_CASE = [
   [
     {
       imgSrc: 'assets/images/wine.png',
@@ -100,9 +100,7 @@ function createPlaceholderForMovedElement(movedObject) {
 }
 
 function createNewContentContainer(objects, index) {
-  // Создаем контейнер для объектов
   const container = document.createElement('div');
-  // Задаем css правила для разных полок
   container.className = 'container';
   if (index === 0) {
     container.style.alignItems = 'flex-end';
@@ -120,7 +118,6 @@ function createNewContentContainer(objects, index) {
   let maxHeight = 0; // Переменная для хранения максимальной высоты элемента
   let imagesLoadedCount = 0; // Счетчик загруженных изображений
 
-  // Проходимся по массиву объектов и создаем соответствующий HTML
   objects.forEach((object) => {
     const objectDiv = document.createElement('div');
     objectDiv.className = 'object';
@@ -131,7 +128,6 @@ function createNewContentContainer(objects, index) {
     img.classList.add(object.imgClass);
     img.classList.add('mouse-event-allowed');
 
-    // Устанавливаем стили для каждого объекта
     objectDiv.style.marginLeft = object.marginLeft;
     objectDiv.style.padding = 0;
     objectDiv.classList.add('mouse-event-allowed');
@@ -141,7 +137,6 @@ function createNewContentContainer(objects, index) {
 
     let parentNode = null;
 
-    // Добавляем функциональность Drag & Drop
     img.addEventListener('dragstart', (event) => {
       parentNode = event.target.parentNode;
       parentNode.insertBefore(
@@ -158,17 +153,14 @@ function createNewContentContainer(objects, index) {
       parentNode.style.opacity = 1;
     });
 
-    // Ждем загрузки изображения
     img.onload = () => {
       imagesLoadedCount++;
-      // Определяем максимальную высоту элемента
       const computedStyle = window.getComputedStyle(img);
       const heightString = computedStyle.height.replace('px', '');
       const height = parseInt(heightString);
       if (height > maxHeight) {
         maxHeight = height;
       }
-      // Если все изображения загружены, устанавливаем высоту контейнера
       if (imagesLoadedCount === objects.length) {
         container.style.height = `${maxHeight}px`;
       }
@@ -203,7 +195,6 @@ function createNewSection(objects, index) {
     darkBar.className = 'dark-bar';
     section.appendChild(darkBar);
   }
-  // Позиционируем полку
   if (index === 0) {
     section.style.top = '0';
   }
@@ -217,33 +208,29 @@ function createNewSection(objects, index) {
 }
 
 function createBasketEvents() {
-  // Получаем ссылку на корзину
   const basketGroup = document.querySelector('.basket-group');
 
-  // Создаем контейнер для перетаскиваемых элементов
   const itemsContainer = document.createElement('div');
   itemsContainer.className = 'basket-items';
   basketGroup.appendChild(itemsContainer);
   basketGroup.classList.add('mouse-event-allowed');
 
-  // Обработчик события для корзины
   basketGroup.addEventListener('dragover', (event) => {
     event.preventDefault();
   });
 
   basketGroup.addEventListener('drop', (event) => {
     event.preventDefault();
-    const className = event.dataTransfer.getData('text/plain'); // Получаем переданный класс
-
+    // Получаем переданный класс
+    const className = event.dataTransfer.getData('text/plain');
     // Находим элемент с соответствующим классом и перемещаем его в корзину
     const elementToMove = document.querySelector(`.${className}`);
     if (elementToMove) {
       itemsContainer.appendChild(elementToMove);
       elementToMove.classList.remove('mouse-event-allowed');
 
-      // Проверяем количество дочерних элементов в itemsContainer
       if (itemsContainer.childElementCount === 3) {
-        // Делаем кнопку visible и заставляем мерцать
+
         const purchaseButton = document.querySelector('.purchased-button');
         purchaseButton.style.opacity = '1';
         purchaseButton.classList.add('blink-button');
@@ -253,7 +240,6 @@ function createBasketEvents() {
     }
   });
 
-  // Вешаем на кнопку функционал
   document
     .querySelector('.purchased-button')
     .addEventListener('click', (event) => {
@@ -264,10 +250,9 @@ function createBasketEvents() {
     });
 }
 
-function createDynamicHtml() {
+function initBanner() {
   const productContainer = document.querySelector('.product-container');
-  objectsGroups.forEach((objects, index) => {
-    // Вставляем созданную секцию в тело документа
+  UPPER_CAMEL_CASE.forEach((objects, index) => {
     const section = createNewSection(objects, index);
     productContainer.appendChild(section);
   });
@@ -278,4 +263,4 @@ function createDynamicHtml() {
   };
 }
 
-document.addEventListener('DOMContentLoaded', createDynamicHtml);
+document.addEventListener('DOMContentLoaded', initBanner);
