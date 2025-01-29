@@ -99,6 +99,27 @@ function createPlaceholderForMovedElement(movedObject) {
   return placeholder;
 }
 
+function createProductImage(object) {
+  const img = document.createElement('img');
+  img.setAttribute('loading', 'lazy');
+  img.src = object.imgSrc;
+  img.alt = object.imgAlt;
+  img.classList.add(object.imgClass);
+  img.classList.add('mouse-event-allowed');
+
+  return img;
+}
+
+function createObjectDiv() {
+  const objectDiv = document.createElement('div');
+  objectDiv.className = 'object';
+  objectDiv.style.marginLeft = object.marginLeft;
+  objectDiv.style.padding = 0;
+  objectDiv.classList.add('mouse-event-allowed');
+
+  return objectDiv
+}
+
 function createNewContentContainer(objects, index) {
   const container = document.createElement('div');
   container.className = 'container';
@@ -115,22 +136,12 @@ function createNewContentContainer(objects, index) {
     container.style.top = '25px';
   }
 
-  let maxHeight = 0; // Переменная для хранения максимальной высоты элемента
-  let imagesLoadedCount = 0; // Счетчик загруженных изображений
+  let maxHeight = 0;
+  let imagesLoadedCount = 0;
 
   objects.forEach((object) => {
-    const objectDiv = document.createElement('div');
-    objectDiv.className = 'object';
-    const img = document.createElement('img');
-    img.setAttribute('loading', 'lazy');
-    img.src = object.imgSrc;
-    img.alt = object.imgAlt;
-    img.classList.add(object.imgClass);
-    img.classList.add('mouse-event-allowed');
-
-    objectDiv.style.marginLeft = object.marginLeft;
-    objectDiv.style.padding = 0;
-    objectDiv.classList.add('mouse-event-allowed');
+    const objectDiv = createObjectDiv();
+    const img = createProductImage(object)
 
     objectDiv.appendChild(img);
     container.appendChild(objectDiv);
@@ -169,7 +180,7 @@ function createNewContentContainer(objects, index) {
   return container;
 }
 
-function createNewSection(objects, index) {
+function createNewProductSection(objects, index) {
   const container = createNewContentContainer(objects, index);
 
   const sectionDivider = document.createElement('img');
@@ -230,11 +241,9 @@ function createBasketEvents() {
       elementToMove.classList.remove('mouse-event-allowed');
 
       if (itemsContainer.childElementCount === 3) {
-
         const purchaseButton = document.querySelector('.purchased-button');
         purchaseButton.style.opacity = '1';
         purchaseButton.classList.add('blink-button');
-
         disableDragAndDrop();
       }
     }
@@ -250,17 +259,24 @@ function createBasketEvents() {
     });
 }
 
-function initBanner() {
+function createProductContainer() {
   const productContainer = document.querySelector('.product-container');
   UPPER_CAMEL_CASE.forEach((objects, index) => {
-    const section = createNewSection(objects, index);
+    const section = createNewProductSection(objects, index);
     productContainer.appendChild(section);
   });
-  createBasketEvents();
+}
 
+function prohibitHighlightsOnBanner() {
   document.onselectstart = function () {
     return false;
   };
+}
+
+function initBanner() {
+  createProductContainer();
+  createBasketEvents();
+  prohibitHighlightsOnBanner()
 }
 
 document.addEventListener('DOMContentLoaded', initBanner);
