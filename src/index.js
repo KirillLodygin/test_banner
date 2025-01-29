@@ -1,4 +1,4 @@
-const UPPER_CAMEL_CASE = [
+const OBJECTS_GROUPS = [
   [
     {
       imgSrc: 'assets/images/wine.png',
@@ -270,7 +270,7 @@ function createBasketEvents() {
 
 function createProductContainer() {
   const productContainer = document.querySelector('.product-container');
-  UPPER_CAMEL_CASE.forEach((objects, index) => {
+  OBJECTS_GROUPS.forEach((objects, index) => {
     const section = createNewProductSection(objects, index);
     productContainer.appendChild(section);
   });
