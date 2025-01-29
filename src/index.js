@@ -117,7 +117,7 @@ function createObjectDiv() {
   objectDiv.style.padding = 0;
   objectDiv.classList.add('mouse-event-allowed');
 
-  return objectDiv
+  return objectDiv;
 }
 
 function createNewContentContainer(objects, index) {
@@ -141,7 +141,7 @@ function createNewContentContainer(objects, index) {
 
   objects.forEach((object) => {
     const objectDiv = createObjectDiv();
-    const img = createProductImage(object)
+    const img = createProductImage(object);
 
     objectDiv.appendChild(img);
     container.appendChild(objectDiv);
@@ -180,9 +180,7 @@ function createNewContentContainer(objects, index) {
   return container;
 }
 
-function createNewProductSection(objects, index) {
-  const container = createNewContentContainer(objects, index);
-
+function createSectionDivider(index) {
   const sectionDivider = document.createElement('img');
   sectionDivider.className = index < 2 ? 'section-divider' : 'footer-image';
   sectionDivider.alt = 'footer-image';
@@ -190,9 +188,20 @@ function createNewProductSection(objects, index) {
     index < 2
       ? 'assets/images/section-divider.svg'
       : 'assets/images/footer-image.svg';
+  return sectionDivider
+}
 
+function createHighlightBar(index) {
   const highlightBar = document.createElement('div');
   highlightBar.className = index < 2 ? 'highlight-bar' : 'gray-separator';
+  return highlightBar;
+}
+
+function createNewProductSection(objects, index) {
+  const container = createNewContentContainer(objects, index);
+  const sectionDivider = createSectionDivider(index);
+
+  const highlightBar = createHighlightBar(index);
 
   const section = document.createElement('div');
   section.className = 'section';
@@ -276,7 +285,7 @@ function prohibitHighlightsOnBanner() {
 function initBanner() {
   createProductContainer();
   createBasketEvents();
-  prohibitHighlightsOnBanner()
+  prohibitHighlightsOnBanner();
 }
 
 document.addEventListener('DOMContentLoaded', initBanner);
